@@ -3,6 +3,8 @@ import time
 import random
 
 #初期設定
+
+
 professinal_list = [0,0,0]
 player_name = []
 masu = [0,0,0]
@@ -27,6 +29,12 @@ event =["","朝から並んでパチンコだ！","今日は7月7日！パチン
 "定時退社！パチンコ！","宝くじで夢を買おう！","","友達と飲み会 ↑","カジノ楽しい～～"]
 
 
+
+
+#------------------------------------------------------------------------#
+#def
+
+#1.職業決め
 def 労働人生():
     global hantei_fate
     global player_money
@@ -35,7 +43,8 @@ def 労働人生():
     global player_shoku
 
     if hantei_fate == -1:
-        work = {"公務員":200000,"エンジニア":220000,"底辺youtuber":150000,"石油王":800000,"サッカー選手":400000,"営業マン":250000,"ニート":80000,"アイドル":180000,"タイミー":100000,"医者":600000}
+        work = {"公務員":200000,"エンジニア":220000,"底辺youtuber":150000,"石油王":800000,
+                "サッカー選手":400000,"営業マン":250000,"ニート":80000,"アイドル":180000,"タイミー":100000,"医者":600000}
         work_list = list(work.keys())
 
         players = {}
@@ -55,6 +64,10 @@ def 労働人生():
             player_shoku.append(job)
     hantei_fate = 0
 
+
+
+
+#パチンコ_確率
 def pachi_result():
     global player_money
     global player_num
@@ -70,7 +83,7 @@ def pachi_result():
         print("アタリ！4万円もらう")
 
         
-
+#カジノ_確率
 def casino_result():
     global player_money
     global player_num
@@ -87,6 +100,8 @@ def casino_result():
         print("あたり！30万円もらう")
 
 
+
+#宝クジ　確立
 def takara_result():
     global player_money
     global player_num
@@ -104,15 +119,26 @@ def takara_result():
         player_money[player_num] += price_takara2
         print("１等！100万円獲得！")
 
+
+
+#ボーナス
 def syouyo_result():
     global player_kyuuryou
     global player_num
     global player_money
     player_money[player_num] += player_kyuuryou[player_num]*3
 
+
+
+#2.ルーレット
 def roulette():
     return random.randint(1,10)
 
+
+
+
+
+#3.移動
 def masu_ido():
     global player_num
     global masu
@@ -128,12 +154,14 @@ def masu_ido():
         roulettes = roulette()
         masu[player_num] += roulettes
         time.sleep(1)
+        #すべてゴールについたら
         if masu[0] > 50 and masu[1] > 50 and masu[2] > 50:
             hantei_fate = 1
             for i in range(len(player_name)):
                 print("\n")
                 print(f"{player_name[i]}：{player_money[i]}")
             return
+        #プレイヤー"n"がゴールについたら
         if masu[player_num] > 50:
             print(f"Player{player_num+1}：{player_shoku[player_num]}\n{masu[player_num]}マス\n")
             print("ゴールしたので5万円貰う")
@@ -145,10 +173,12 @@ def masu_ido():
                 player_num = 0
             return
             
-
+        #通常処理
         print(f"Player{player_num+1}：{player_shoku[player_num]}\n{masu[player_num]}マス\n")
         event_masu = event[masu[player_num]]
         print(event_masu)
+
+        #からのマスもあるため
         if event_masu =="":
             pass
         else:        
@@ -164,6 +194,8 @@ def masu_ido():
         return event_masu
 
 
+
+#4.単語検知
 def money(event_masu):
     global player_money
     global event
@@ -182,15 +214,8 @@ def money(event_masu):
             player_money[player_num] = 100000
     return player_money[player_num]
 
-def salary(a,player_numb):
-    global professional_dict
-    global player_money
-    player_money[player_numb] += professional_dict[a]
 
-
-
-
-
+#-------------------------------------------------------------------------------#
 
 
 #ゲーム文
@@ -203,5 +228,3 @@ keyboard.on_press_key("ctrl",lambda _: masu_ido()) #ます移動
 keyboard.on_press_key("shift",lambda _: 労働人生()) #職業決め（最初に実行）
 
 keyboard.wait()
-
-
